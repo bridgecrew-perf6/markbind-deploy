@@ -55,6 +55,7 @@ runs:
         --site-config ${{ inputs.siteConfig }}
         cd ..
         echo "Great success!"
+      shell: bash
     - name: Build with released version of markbind-cli
       if: inputs.version != 'master'
       run: |
@@ -64,6 +65,7 @@ runs:
         --baseUrl ${{ inputs.baseUrl }} \
         --site-config ${{ inputs.siteConfig }}
         cd ..
+      shell: bash
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
