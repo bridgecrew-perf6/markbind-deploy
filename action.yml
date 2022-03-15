@@ -1,0 +1,73 @@
+name: markbind-deploy-gh-pages
+description: 'Deploy your MarkBind site to the gh-pages branch of the same repository'
+branding: 
+  icon: 'upload-cloud'
+  color: 'blue'
+
+inputs:
+  githubToken:
+    description: the required token
+    required: true
+  version:
+    description: the MarkBind version to use. e.g. 3.1.1
+    default: 'latest'
+    type: string
+  rootDirectory:
+    description: the directory to read source files from
+    default: '.'
+    type: string
+  baseUrl:
+    description: the base URL relative to your domain
+    default: ''
+    type: string
+  siteConfig:
+    description: the site config file to use
+    default: 'site.json'
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout source repo
+      uses: actions/checkout@v3
+      with:
+        path: curr-repo
+    - name: Install Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: 12
+    - name: Install markbind-cli@master
+      if: inputs.version == 'master'
+      uses: actions/checkout@v3
+      with:
+        repository: MarkBind/markbind
+        path: markbind-cli
+    - name: Build with markbind-cli@master
+      if: inputs.version == 'master'
+      run: |
+        npm i -g npm@8.3.1
+        cd markbind-cli
+        npm run setup && npm run build:web
+        cd ../curr-repo
+        node ../markbind-cli/packages/cli/index.js \
+        build ${{ inputs.rootDirectory }} \
+        --baseUrl ${{ inputs.baseUrl }} \
+        --site-config ${{ inputs.siteConfig }}
+        cd ..
+        echo "Great success!"
+    - name: Build with released version of markbind-cli
+      if: inputs.version != 'master'
+      run: |
+        npm install -g markbind-cli@${{ inputs.version }}
+        cd curr-repo
+        markbind build ${{ inputs.rootDirectory }} \
+        --baseUrl ${{ inputs.baseUrl }} \
+        --site-config ${{ inputs.siteConfig }}
+        cd ..
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./curr-repo/_site
+        user_name: github-actions[bot]
+        user_email: 41898282+github-actions[bot]@users.noreply.github.com
