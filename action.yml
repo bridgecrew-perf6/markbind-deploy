@@ -69,7 +69,7 @@ runs:
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ inputs.githubToken }}
         publish_dir: ./curr-repo/_site
         user_name: github-actions[bot]
         user_email: 41898282+github-actions[bot]@users.noreply.github.com
