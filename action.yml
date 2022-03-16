@@ -39,11 +39,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Source Repo
-      run: |
-        repoName = ${{ github.repository }}
-        echo ${$repoName/\//-}
-      shell: bash
     - name: Checkout source repo
       uses: actions/checkout@v3
       with:
