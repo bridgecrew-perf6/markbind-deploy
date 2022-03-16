@@ -1,13 +1,24 @@
-name: markbind-deploy-gh-pages
-description: 'Deploy your MarkBind site to the gh-pages branch of the same repository'
+name: markbind-deploy
+description: 'Deploy your MarkBind site'
 branding: 
   icon: 'upload-cloud'
   color: 'blue'
 
 inputs:
-  githubToken:
+  token:
     description: the required token
     required: true
+  service:
+    description: the publishing service
+    default: 'gh-pages'
+    type: string
+  purpose:
+    description: the deployment purpose, could be standard deployment or for PR preview
+    default: 'deployment'
+    type: string
+  domain:
+    description: the domain to use 
+    type: string
   version:
     description: the MarkBind version to use. e.g. 3.1.1
     default: 'latest'
@@ -28,6 +39,11 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Dump github context
+      run: echo "$GITHUB_CONTEXT"
+      shell: bash
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
     - name: Checkout source repo
       uses: actions/checkout@v3
       with:
@@ -65,11 +81,48 @@ runs:
         --baseUrl ${{ inputs.baseUrl }} \
         --site-config ${{ inputs.siteConfig }}
         cd ..
+        echo "Great success!"
       shell: bash
-    - name: Deploy
+    - name: Deploy via gh-pages
+      if: inputs.service == 'gh-pages'
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ inputs.githubToken }}
+        github_token: ${{ inputs.token }}
         publish_dir: ./curr-repo/_site
         user_name: github-actions[bot]
         user_email: 41898282+github-actions[bot]@users.noreply.github.com
+    - name: Deploy via Surge.sh for normal deployment
+      if: inputs.service == 'surge'
+      run: |
+        npm i -g surge
+        surge --project ./curr-repo/_site --domain ${{ inputs.domain }}
+      shell: bash
+      env:
+        SURGE_TOKEN: ${{ inputs.token }}
+    - name: Deploy via Surge.sh for PR Preview
+      if: inputs.service == 'surge' && inputs.purpose == 'pr preview' && github.event_name == 'pull_request'
+      run: |
+        echo "prNum=${{ github.event.number }}" >> $GITHUB_ENV
+        npm i -g surge
+        PR_PREVIEW_URL="https://pr-${{ github.event.number }}-${{ inputs.baseUrl }}.surge.sh/"
+        echo "previewUrl=$PR_PREVIEW_URL" >> $GITHUB_ENV
+        surge --project ./_site --domain $PR_PREVIEW_URL
+      shell: bash
+      env:
+        SURGE_TOKEN: ${{ inputs.token }}
+    - name: Find existing PR preview link comment
+      if: inputs.service == 'surge' && inputs.purpose == 'pr preview' && github.event_name == 'pull_request'
+      uses: peter-evans/find-comment@v1
+      id: fc
+      with:
+        issue-number: ${{ env.prNum }}
+        body-includes: Your PR can be previewed
+    - name: Comment PR preview link in PR
+      if: inputs.service == 'surge' && inputs.purpose == 'pr preview' && github.event_name == 'pull_request' && steps.fc.outputs.comment-id == 0
+      uses: peter-evans/create-or-update-comment@v1
+      with:
+        issue-number: ${{ env.prNum }}
+        body: |
+          Thank you for submitting the Pull Request! :thumbsup: 
+
+          Your PR can be previewed [here](${{ env.previewUrl }})
