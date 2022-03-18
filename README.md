@@ -70,9 +70,9 @@ The directory to read source files from.
 - '.'
   - This is the default value
   - This is for the case that your source files of the MarkBind site are in the root directory of the repository
-- 'path/to/directory'
+- './path/to/directory'
   - This is for the case that your source files of the MarkBind site are in a subdirectory of the repository
-  - A sample path is '/docs'
+  - A sample path is './docs'
 
 ### baseUrl (MarkBind CLI arguments)
 The base URL relative to your domain.
