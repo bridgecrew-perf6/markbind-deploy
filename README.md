@@ -11,6 +11,15 @@ rootDirectory |    no    |          '.' | the directory to read source files fro
 baseUrl       |    no    |           '' | the base URL relative to your domain
 siteConfig    |    no    |  'site.json' | the site config file to use
 
+## Option Details
+
+### token
+Currently two types of tokens are supported:
+- token for GitHub Pages
+  - simply use `${{ secrets.GITHUB_TOKEN }}`
+- token for Surge.sh
+  - require registration with an email address.
+  - after retrieving the token, put the token as a repository secret in your repository.
 # Usage
 Use as a step within your GitHub Action workflow. E.g. within your `.github/workflows/build.yml`
 ```yaml
