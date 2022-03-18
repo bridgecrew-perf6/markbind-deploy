@@ -170,6 +170,7 @@ jobs:
         uses: tlylt/markbind-deploy@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          baseUrl: '/mb-test'
           version: 'master'
 ```
 'master' is specified so that the site is built with the latest (possibly unpublished) version of MarkBind.
