@@ -87,7 +87,7 @@ runs:
         user_name: github-actions[bot]
         user_email: 41898282+github-actions[bot]@users.noreply.github.com
     - name: Deploy via Surge.sh for normal deployment
-      if: inputs.service == 'surge'
+      if: inputs.service == 'surge' && inputs.purpose == 'deployment'
       run: |
         npm i -g surge
         surge --project ./curr-repo/_site --domain ${{ inputs.domain }}
@@ -101,7 +101,7 @@ runs:
         npm i -g surge
         PR_PREVIEW_URL="https://pr-${{ github.event.number }}-${{ inputs.domain }}"
         echo "previewUrl=$PR_PREVIEW_URL" >> $GITHUB_ENV
-        surge --project ./_site --domain $PR_PREVIEW_URL
+        surge --project ./curr-repo/_site --domain $PR_PREVIEW_URL
       shell: bash
       env:
         SURGE_TOKEN: ${{ inputs.token }}
