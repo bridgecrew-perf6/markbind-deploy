@@ -189,14 +189,17 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           baseUrl: '/mb-test'
-          rootDirectory: '/docs'
+          rootDirectory: './docs'
 ```
 
 ## PR Preview for PRs made following a branching workflow
 ```yaml
 name: MarkBind Deploy
 
-on: [push]
+on:
+  pull_request:
+    branches:
+      - master
 
 jobs: 
   build_and_deploy:
