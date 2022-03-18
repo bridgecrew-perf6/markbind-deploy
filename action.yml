@@ -61,7 +61,7 @@ runs:
         npm run setup && npm run build:web
         cd ../curr-repo
         node ../markbind-cli/packages/cli/index.js \
-        build ${{ inputs.rootDirectory }} \
+        build ${{ inputs.rootDirectory }} ./_site \
         --baseUrl ${{ inputs.baseUrl }} \
         --site-config ${{ inputs.siteConfig }}
         cd ..
@@ -72,7 +72,7 @@ runs:
       run: |
         npm install -g markbind-cli@${{ inputs.version }}
         cd curr-repo
-        markbind build ${{ inputs.rootDirectory }} \
+        markbind build ${{ inputs.rootDirectory }} ./_site \
         --baseUrl ${{ inputs.baseUrl }} \
         --site-config ${{ inputs.siteConfig }}
         cd ..
