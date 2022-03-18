@@ -65,7 +65,7 @@ runs:
         --baseUrl ${{ inputs.baseUrl }} \
         --site-config ${{ inputs.siteConfig }}
         cd ..
-        echo "Great success!"
+        echo "Site Built!"
       shell: bash
     - name: Build with released version of markbind-cli
       if: inputs.version != 'master'
@@ -76,7 +76,7 @@ runs:
         --baseUrl ${{ inputs.baseUrl }} \
         --site-config ${{ inputs.siteConfig }}
         cd ..
-        echo "Great success!"
+        echo "Site Built!"
       shell: bash
     - name: Deploy via gh-pages
       if: inputs.service == 'gh-pages'
@@ -99,7 +99,7 @@ runs:
       run: |
         echo "prNum=${{ github.event.number }}" >> $GITHUB_ENV
         npm i -g surge
-        PR_PREVIEW_URL="https://pr-${{ github.event.number }}-${{ inputs.baseUrl }}.surge.sh/"
+        PR_PREVIEW_URL="https://pr-${{ github.event.number }}-${{ inputs.domain }}"
         echo "previewUrl=$PR_PREVIEW_URL" >> $GITHUB_ENV
         surge --project ./_site --domain $PR_PREVIEW_URL
       shell: bash

@@ -20,6 +20,7 @@ siteConfig    |    no    |  'site.json' | The site config file to use
 Currently two types of tokens are supported (correspond to the two supported publishing services):
 - token for GitHub Pages
   - simply use `${{ secrets.GITHUB_TOKEN }}`
+  - Note that you need to ensure that your have selected the branch that you want to deploy to in your GitHub settings
 - token for Surge.sh
   - example: `${{ secrets.SURGE_TOKEN }}`
     - `SURGE_TOKEN` is the environment secret name
