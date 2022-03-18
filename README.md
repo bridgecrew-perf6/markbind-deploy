@@ -32,7 +32,76 @@ jobs:
 The above script builds the site from repository root directory, with baseUrl of '/mb-test' ('mb-test' is the repository name), with MarkBind version 3.1.1.
 Then, it will deploy the site to GitHub Pages. It runs everytime there is a push to the repository.
 # Scenarios
-- Deploy to Surge.sh
-- Build with different versions of MarkBind
-- Build with docs file that is not in the root level
-- PR Preview
+## Deploy to Surge.sh
+```yaml
+name: MarkBind Deploy
+
+on: [push]
+
+jobs: 
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build & Deploy to GitHub Pages
+        uses: tlylt/markbind-deploy@main
+        with:
+          token: ${{ secrets.SURGE_TOKEN }}
+          service: 'surge'
+          domain: 'mb-test.surge.sh'
+```
+Note that if you are using custom domain, you will need to ensure that it is configured with Surge.sh
+
+## Build with the development branch of MarkBind
+```yaml
+name: MarkBind Deploy
+
+on: [push]
+
+jobs: 
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build & Deploy to GitHub Pages
+        uses: tlylt/markbind-deploy@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: 'master'
+```
+'master' is used to build with the latest (possibly unpublished) version of MarkBind.
+
+## Build with docs file that is not in the root level
+```yaml
+name: MarkBind Deploy
+
+on: [push]
+
+jobs: 
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build & Deploy to GitHub Pages
+        uses: tlylt/markbind-deploy@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          baseUrl: '/mb-test'
+          rootDirectory: '/docs'
+```
+
+## PR Preview
+```yaml
+name: MarkBind Deploy
+
+on: [push]
+
+jobs: 
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build & Deploy to GitHub Pages
+        uses: tlylt/markbind-deploy@main
+        with:
+          token: ${{ secrets.SURGE_TOKEN }}
+          service: 'surge'
+          purpose: 'pr-preview'
+          domain: 'mb-test.surge.sh'
+```
