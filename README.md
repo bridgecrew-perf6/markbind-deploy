@@ -4,12 +4,13 @@ A GitHub Action that builds and deploys your MarkBind site.
 ## Option Summary
 
 Option        | Required |      Default | Remarks
-:-------------|:--------:|-------------:|----------------------------------------------------------------------------------------------------------
+:-------------|:--------:|-------------:|------------------------------------------------------------------------------
 token         |   yes    |              | The token to be used for the service
 service       |    no    |   'gh-pages' | The publishing service to deploy the site
 purpose       |    no    | 'deployment' | The deployment purpose
 domain        |    no    |           '' | The domain that the site is available at. Required if service chosen is surge
 version       |    no    |     'latest' | The MarkBind version to use to build the site
+keepFiles     |    no    |        false | Whether to keep the files in the published branch before pushing
 rootDirectory |    no    |          '.' | The directory to read source files from
 baseUrl       |    no    |           '' | The base URL relative to your domain
 siteConfig    |    no    |  'site.json' | The site config file to use
@@ -64,6 +65,13 @@ The MarkBind version to use to build the site.
 - 'X.Y.Z'
   - This is the version of MarkBind with the specified version number
   - A sample version number is '3.1.1'
+
+### keepFiles
+Whether to keep the files in the published branch before pushing.
+- false
+  - This is the default value
+- true
+  - THis will make the published branch keep the existing files before an update is made.
 
 ### rootDirectory (MarkBind CLI arguments)
 The directory to read source files from.

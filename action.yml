@@ -35,6 +35,10 @@ inputs:
     description: the site config file to use
     default: 'site.json'
     type: string
+  keepFiles:
+    description: whether the existing files will be removed in the published branch, before pushing.
+    default: false
+    type: boolean
 
 runs:
   using: "composite"
@@ -86,6 +90,7 @@ runs:
         publish_dir: ./curr-repo/_site
         user_name: github-actions[bot]
         user_email: 41898282+github-actions[bot]@users.noreply.github.com
+        keep_files: ${{ inputs.keepFiles }}
     - name: Deploy via Surge.sh for normal deployment
       if: inputs.service == 'surge' && inputs.purpose == 'deployment'
       run: |
