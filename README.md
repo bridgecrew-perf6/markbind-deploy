@@ -67,11 +67,11 @@ The MarkBind version to use to build the site.
   - A sample version number is '3.1.1'
 
 ### keepFiles
-Whether to keep the files in the published branch before pushing.
+Whether to keep the files in the published branch before pushing. This is a boolean parameter.
 - false
   - This is the default value
 - true
-  - THis will make the published branch keep the existing files before an update is made.
+  - This will make the published branch keep the existing files before an update is made.
 
 ### rootDirectory (MarkBind CLI arguments)
 The directory to read source files from.
