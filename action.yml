@@ -73,6 +73,7 @@ runs:
         npm install -g markbind-cli@${{ inputs.version }}
       shell: bash
     - name: Build site
+      run: |
         BASEURL="--baseUrl ${{ inputs.baseurl }}" 
         if [[ ${{ inputs.baseurl }} == "unsetFlag" ]]; then
           BASEURL=""
