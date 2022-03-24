@@ -29,7 +29,7 @@ inputs:
     type: string
   baseUrl:
     description: the base URL relative to your domain
-    default: ''
+    default: 'unsetFlag' # a flag indicating that baseUrl defaults to the one specified in site.json config file
     type: string
   siteConfig:
     description: the site config file to use
@@ -51,34 +51,36 @@ runs:
       uses: actions/setup-node@v2
       with:
         node-version: 12
-    - name: Install markbind-cli@master
+    - name: Checkout markbind-cli@master
       if: inputs.version == 'master'
       uses: actions/checkout@v3
       with:
         repository: MarkBind/markbind
         path: markbind-cli
-    - name: Build with markbind-cli@master
+    - name: Install markbind-cli@master
       if: inputs.version == 'master'
       run: |
         npm i -g npm@8.3.1
         cd markbind-cli
         npm run setup && npm run build:web
-        cd ../curr-repo
-        node ../markbind-cli/packages/cli/index.js \
-        build ${{ inputs.rootDirectory }} ./_site \
-        --baseUrl ${{ inputs.baseUrl }} \
-        --site-config ${{ inputs.siteConfig }}
-        cd ..
-        echo "Site Built!"
+        cd packages/cli
+        npm link
+        cd ../../..
       shell: bash
-    - name: Build with released version of markbind-cli
+    - name: Install a released version of markbind-cli
       if: inputs.version != 'master'
       run: |
         npm install -g markbind-cli@${{ inputs.version }}
+      shell: bash
+    - name: Build site
+        BASEURL="--baseUrl ${{ inputs.baseurl }}" 
+        if [[ ${{ inputs.baseurl }} == "unsetFlag" ]]; then
+          BASEURL=""
+          echo "Default baseUrl to the config file attribute"
+        fi
         cd curr-repo
         markbind build ${{ inputs.rootDirectory }} ./_site \
-        --baseUrl ${{ inputs.baseUrl }} \
-        --site-config ${{ inputs.siteConfig }}
+        $BASEURL --site-config ${{ inputs.siteConfig }}
         cd ..
         echo "Site Built!"
       shell: bash

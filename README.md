@@ -3,17 +3,17 @@ A GitHub Action that builds and deploys your MarkBind site.
 
 ## Option Summary
 
-Option        | Required |      Default | Remarks
-:-------------|:--------:|-------------:|------------------------------------------------------------------------------
-token         |   yes    |              | The token to be used for the service
-service       |    no    |   'gh-pages' | The publishing service to deploy the site
-purpose       |    no    | 'deployment' | The deployment purpose
-domain        |    no    |           '' | The domain that the site is available at. Required if service chosen is surge
-version       |    no    |     'latest' | The MarkBind version to use to build the site
-keepFiles     |    no    |        false | Whether to keep the files in the published branch before pushing
-rootDirectory |    no    |          '.' | The directory to read source files from
-baseUrl       |    no    |           '' | The base URL relative to your domain
-siteConfig    |    no    |  'site.json' | The site config file to use
+Option        | Required |                      Default | Remarks
+:-------------|:--------:|-----------------------------:|------------------------------------------------------------------------------
+token         |   yes    |                              | The token to be used for the service
+service       |    no    |                   'gh-pages' | The publishing service to deploy the site
+purpose       |    no    |                 'deployment' | The deployment purpose
+domain        |    no    |                           '' | The domain that the site is available at. Required if service chosen is surge
+version       |    no    |                     'latest' | The MarkBind version to use to build the site
+keepFiles     |    no    |                        false | Whether to keep the files in the published branch before pushing
+rootDirectory |    no    |                          '.' | The directory to read source files from
+baseUrl       |    no    | value specified in site.json | The base URL relative to your domain
+siteConfig    |    no    |                  'site.json' | The site config file to use
 
 ## Option Details
 
@@ -84,8 +84,7 @@ The directory to read source files from.
 
 ### baseUrl (MarkBind CLI arguments)
 The base URL relative to your domain.
-- ''
-  - This is the default value
+- Defaults to whatever value of `baseUrl` in your `site.json` file
 - '/reponame'
   - This is for deploying your site to GitHub Pages
   - Note that you will need to specify this in order to configure the relative URL correctly. This should also be specified in the site config file
