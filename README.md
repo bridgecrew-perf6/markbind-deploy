@@ -144,6 +144,26 @@ The above script builds the site from the repository's root directory, with base
 Then, it will deploy the site to GitHub Pages. It runs everytime there is a push to the repository.
 
 # Scenarios
+## Deploy to Github Pages on push to main
+```yaml
+name: MarkBind Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs: 
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build & Deploy to GitHub Pages
+        uses: tlylt/markbind-deploy@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: '3.1.1'
+```
+
 ## Deploy to Surge.sh
 ```yaml
 name: MarkBind Deploy
@@ -219,3 +239,11 @@ jobs:
           purpose: 'pr-preview'
           domain: 'mb-test.surge.sh'
 ```
+
+## Underlying Actions
+Besides some processing bash scripts, this action is composed of the following actions:
+- [actions/checkout](https://github.com/actions/checkout)
+- [actions/setup-node](https://github.com/actions/setup-node)
+- [peter-evans/find-comment](https://github.com/peter-evans/find-comment)
+- [peter-evans/create-or-update-comment](https://github.com/peter-evans/create-or-update-comment)
+- [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages)
