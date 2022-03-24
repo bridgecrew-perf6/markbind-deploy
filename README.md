@@ -12,31 +12,31 @@ domain        |    no    |                           '' | The domain that the si
 version       |    no    |                     'latest' | The MarkBind version to use to build the site
 keepFiles     |    no    |                        false | Whether to keep the files in the published branch before pushing
 rootDirectory |    no    |                          '.' | The directory to read source files from
-baseUrl       |    no    | value specified in site.json | The base URL relative to your domain
+baseUrl       |    no    | Value specified in site.json | The base URL relative to your domain
 siteConfig    |    no    |                  'site.json' | The site config file to use
 
 ## Option Details
 
 ### token
 Currently two types of tokens are supported (correspond to the two supported publishing services):
-- token for GitHub Pages
-  - simply use `${{ secrets.GITHUB_TOKEN }}`
-  - Note that you need to ensure that your have selected the branch that you want to deploy to in your GitHub settings
-- token for Surge.sh
-  - example: `${{ secrets.SURGE_TOKEN }}`
+- Token for GitHub Pages
+  - Simply use `${{ secrets.GITHUB_TOKEN }}`
+  - Note that you need to ensure that your have selected the branch that you want to deploy to in your GitHub repo's Pages settings
+- Token for Surge.sh
+  - Example: `${{ secrets.SURGE_TOKEN }}`
     - `SURGE_TOKEN` is the environment secret name
-  - require registration with an email address
-  - after retrieving the token, put the token as a repository secret in your
-  - see [here](https://markbind.org/userGuide/deployingTheSite.html#previewing-prs-using-surge) for a detailed guide on how to retrieve the token
+  - Require registration with an email address
+  - After retrieving the token, put the token as a repository secret in your
+  - See [here](https://markbind.org/userGuide/deployingTheSite.html#previewing-prs-using-surge) for a detailed guide on how to retrieve the token
 
 ### service
 Currently two types of publishing services are supported:
 - GitHub Pages
   - 'gh-pages'
-  - see [here](https://markbind.org/userGuide/deployingTheSite.html#publishing-to-github-pages) for more details
+  - See [here](https://markbind.org/userGuide/deployingTheSite.html#publishing-to-github-pages) for more details
 - Surge.sh
   - 'surge'
-  - see [here](https://surge.sh/) for more details
+  - See [here](https://surge.sh/) for more details
 
 ### purpose
 The purpose of the deployment. This can be either standard deployment or for PR previewing.
@@ -84,10 +84,10 @@ The directory to read source files from.
 
 ### baseUrl (MarkBind CLI arguments)
 The base URL relative to your domain.
-- Defaults to whatever value of `baseUrl` in your `site.json` file
 - '/reponame'
-  - This is for deploying your site to GitHub Pages
-  - Note that you will need to specify this in order to configure the relative URL correctly. This should also be specified in the site config file
+  - Defaults to the value of `baseUrl` in your `site.json` file
+  - This is important for deploying your site to GitHub Pages
+  - Note that you will need to specify this or in the site config file (typically the `site.json`), in order to configure the relative URL correctly.
 
 ### siteConfig (MarkBind CLI arguments)
 The site config file to use.
@@ -177,7 +177,6 @@ jobs:
         uses: tlylt/markbind-deploy@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          baseUrl: '/mb-test'
           version: 'master'
 ```
 'master' is specified so that the site is built with the latest (possibly unpublished) version of MarkBind.
@@ -196,7 +195,6 @@ jobs:
         uses: tlylt/markbind-deploy@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          baseUrl: '/mb-test'
           rootDirectory: './docs'
 ```
 
